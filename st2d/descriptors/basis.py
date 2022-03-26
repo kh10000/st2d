@@ -1,4 +1,4 @@
-import sys
+import os, sys
 
 import yaml
 
@@ -30,6 +30,12 @@ class Basis():
             except:
                 print(f"Warning: {self.inputs[key]} was not set.")
                 pass
+    
+
+    def _make_data_dir(self):
+        self.data_dir = self.inputs["data_dir"]
+        if not os.path.exists(self.data_dir):
+            os.makedirs(self.data_dir)
     
 
     def _parse_strlist(self, str_list):

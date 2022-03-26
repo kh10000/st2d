@@ -38,13 +38,10 @@ class ACSF(Basis):
         comm = super()._get_comm()
         
         if comm.rank == 0:
-            print("comm.size:", comm.size)
-            print("Generating descriptors...")
+            print("Start the computation of descriptors.")
             pickle_list = open(self.inputs["pickle_list"], "w")
 
-            data_dir = self.inputs["data_dir"]
-            if not os.path.exists(data_dir):
-                os.makedirs(data_dir)
+            super()._make_data_dir()
         
         # Get structure list to calculate
         structures = super()._parse_strlist(self.inputs["structure_list"])
@@ -103,7 +100,7 @@ class ACSF(Basis):
                 cal_atoms_p = ffi.cast("int *", cal_atoms.ctypes.data)
 
                 x = np.zeros([cal_num, params_set[jtem]["num"]], dtype=np.float64, order="C")
-                x_p = self._gen_2Darray_for_ffi(x, ffi)
+                x_p = _gen_2Darray_for_ffi(x, ffi)
 
                 errno = lib.calculate_sf(cell_p, cart_p, scale_p, \
                                          atom_i_p, atom_num, cal_atoms_p, cal_num, \
@@ -139,7 +136,7 @@ class ACSF(Basis):
                     res["x"][jtem] = np.zeros([0, params_set[jtem]["num"]])
                 
             if comm.rank == 0:
-                tmp_filename = os.path.join(data_dir, "data{}.pickle".format(data_idx))
+                tmp_filename = os.path.join(self.data_dir, "data{}.pickle".format(data_idx))
 
                 with open(tmp_filename, "wb") as fil:
                     pickle.dump(res, fil)
@@ -151,4 +148,5 @@ class ACSF(Basis):
             
         if comm.rank == 0:
             print(": ~{}\n".format(tmp_endfile))
+            print("Finish!")
             pickle_list.close()
