@@ -1,0 +1,9 @@
+structure_list: ./str_list
+data_dir: ./data
+pickle_list: ./pickle_list
+params: params
+atom_types:
+ - Sr
+ - Ti
+ - O
+ 
