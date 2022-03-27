@@ -5,12 +5,12 @@ import numpy as np
 from ase import io
 
 from st2d.lib._libacsf import lib, ffi
-from st2d.descriptors.basis import Basis
-from st2d.descriptors.basis import _gen_2Darray_for_ffi
+from st2d.descriptors.descriptor import Descriptor
+from st2d.descriptors.descriptor import _gen_2Darray_for_ffi
 
-class ACSF(Basis):
+class ACSF(Descriptor):
     def __init__(self, input="./input.yaml"):
-        self.basis_type = "acsf"
+        self.descriptor_type = "acsf"
         super().__init__(input)
     
 
@@ -38,7 +38,7 @@ class ACSF(Basis):
         comm = super()._get_comm()
         
         if comm.rank == 0:
-            print("Start the computation of descriptors.")
+            print("Start the generation of descriptors.")
             pickle_list = open(self.inputs["pickle_list"], "w")
 
             super()._make_data_dir()
@@ -147,6 +147,6 @@ class ACSF(Basis):
                 data_idx += 1
             
         if comm.rank == 0:
-            print(": ~{}\n".format(tmp_endfile))
+            print(": ~{}".format(tmp_endfile))
             print("Finish!")
             pickle_list.close()
