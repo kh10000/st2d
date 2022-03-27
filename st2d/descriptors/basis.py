@@ -66,7 +66,7 @@ class Basis():
         return self.comm
 
 
-def _gen_2Darray_for_ffi(self, arr, ffi, cdata="double"):
+def _gen_2Darray_for_ffi(arr, ffi, cdata="double"):
     """
     Function to generate 2D pointer for cffi  
     """
