@@ -31,7 +31,7 @@ class Chebyshev(Descriptor):
     
     def generate(self):
         """
-        Generat descriptor from str_list.
+        Generate descriptors from str_list.
         data*.pickle contains the descriptor vectors.
         """
         
