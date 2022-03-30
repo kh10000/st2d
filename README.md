@@ -7,8 +7,8 @@ A simple [documentation](https://kh10000.github.io/st2d) is available.
 # Installation
 ## From GitHub
 ```
-git clone https://github.com/kh10000/descriptor.git
-cd descriptor
+git clone https://github.com/kh10000/st2d.git
+cd st2d
 pip install .
 ```
 In order for the calculations with MPI parallelization, additional installation of mpi4py by
