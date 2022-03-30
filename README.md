@@ -19,7 +19,7 @@ is required.
 
 # LICENCE
 **st2d** started from [SIMPLE-NN](https://github.com/MDIL-SNU/SIMPLE-NN), and is subject to the terms of the GPL-3.0 License.
-Changed parts are described in [Change Log](*).
+Changed parts are described in [Change Log](https://kh10000.github.io/st2d/changelog.html).
 
 # Contributing
 Any contribution is very welcome.
