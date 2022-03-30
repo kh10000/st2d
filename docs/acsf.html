@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+      <title>Atom centered symmetry functions (ACSFs)</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Chebyshev" href="chebyshev.html" />
+  <link rel="prev" title="Examples" href="examples.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">st2d</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-st2d">Documentation</a></span>
+      </p>
+      <ul class="">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="installation.html" class="reference internal ">Installation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="examples.html" class="reference internal ">Examples</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="changelog.html" class="reference internal ">Change Log</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+      <li><a href="examples.html">Examples</a> &raquo;</li>
+    
+    <li>Atom centered symmetry functions (ACSFs)</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="examples.html"
+       title="previous chapter">← Examples</a>
+  </li>
+  <li class="next">
+    <a href="chebyshev.html"
+       title="next chapter">Chebyshev →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <div class="section" id="atom-centered-symmetry-functions-acsfs">
+<h1>Atom centered symmetry functions (ACSFs)<a class="headerlink" href="#atom-centered-symmetry-functions-acsfs" title="Permalink to this headline">¶</a></h1>
+<p>In this section, the procedure for generating descriptors consist of Atom Centered Symmetry Functions (ACSFs)[1,2] is described.
+The minimum input files required for the calculation are <code class="docutils literal notranslate"><span class="pre">input.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">str_list</span></code>, and hyper-parameter setting files.
+The example of <code class="docutils literal notranslate"><span class="pre">input.yaml</span></code> in Ti-O-Sr system is shown below.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>structure_list: ./str_list
+data_dir: ./data
+pickle_list: ./pickle_list
+atom_types:
+ - Sr
+ - Ti
+ - O
+params: params
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">structure_list</span></code> specifies the file containing the paths to the structure files to be calculated. The example is shown bellow.
+The structure files can be in any format as long as they can be recognized by <strong>ase.io.read()</strong>.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>../structure_data/structure_file_0
+../structure_data/structure_file_1
+../structure_data/structure_file_2
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">data_dir</span></code> specifies the path to the directory to which output files (pickle files) are stored, and <code class="docutils literal notranslate"><span class="pre">pickle_list</span></code> specifies the file where the name of output pickle files are recorded.
+In <code class="docutils literal notranslate"><span class="pre">atom_types</span></code>, all the atomic species in structure files must be listed.</p>
+<p>Hyper-parameters for each atom type is parsed acccording to the value of <code class="docutils literal notranslate"><span class="pre">params</span></code>. Specifically, file with the name of “{value}_{atom type}” is parsed.
+For example, if “params” is set in <code class="docutils literal notranslate"><span class="pre">params</span></code>, three files, <code class="docutils literal notranslate"><span class="pre">params_Sr</span></code>, <code class="docutils literal notranslate"><span class="pre">params_Ti</span></code>, and <code class="docutils literal notranslate"><span class="pre">params_O</span></code> should be prepared.
+The format of params_X file is the same as SIMPLE-NN[3] format, as shown bellow.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>2 1 0 7.0 0.0139 0.5  0.0
+2 1 0 7.0 0.0139 6.5  0.0
+2 2 0 7.0 0.0139 0.5  0.0
+2 2 0 7.0 0.0139 6.5  0.0
+2 3 0 7.0 0.0139 0.5  0.0
+2 3 0 7.0 0.0139 6.5  0.0
+4 1 1 7.0 0.5000 1.0  1.0
+4 1 1 7.0 0.5000 1.0 -1.0
+4 2 2 7.0 0.5000 1.0  1.0
+4 2 2 7.0 0.5000 1.0 -1.0
+4 3 3 7.0 0.5000 1.0  1.0
+4 3 3 7.0 0.5000 1.0 -1.0
+</pre></div>
+</div>
+<p>The value in the first column indicates the symmetry function (SF) type among G2, G4, ang G5.
+When 2 is set in the first column, the value in the second column indicates the index of the counterpart atom starting from 1, and the third column is the dummy column.
+The fourth column is for cutoff radius, and the fith and sixth column are for <span class="math notranslate nohighlight">\(\eta\)</span> and <span class="math notranslate nohighlight">\(R_s\)</span>, respectively. The seventh column is the dummy column again.</p>
+<p>In the case when 4 or 5 is set in the first column, the values in the second and third columns are the indices of neighbor atoms.
+The fourth column is for cutoff radius, and the fifth to seventh column are for <span class="math notranslate nohighlight">\(\eta\)</span>, <span class="math notranslate nohighlight">\(\zeta\)</span>, and <span class="math notranslate nohighlight">\(\lambda\)</span>, respectively.</p>
+<p>Once <code class="docutils literal notranslate"><span class="pre">input.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">str_list</span></code>, and <code class="docutils literal notranslate"><span class="pre">params_X</span></code> are prepared, the descriptors can be generated by runnig the following script.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">st2d.descriptors.acsf</span> <span class="kn">import</span> <span class="n">ACSF</span>
+
+<span class="n">acsf</span> <span class="o">=</span> <span class="n">ACSF</span><span class="p">(</span><span class="s2">&quot;input.yaml&quot;</span><span class="p">)</span>
+<span class="n">acsf</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">[1] J. Behler <em>et al.</em>, Phys. Rev. Lett. <strong>98</strong>, 146401 (2007).</div>
+<div class="line">[2] J. Behler, J. Chem. Phys. <strong>134</strong>, 074106 (2011).</div>
+<div class="line">[3] K. Lee <em>et al.</em>, Comput. Phys. Commun. <strong>242</strong>, 95-103 (2019).</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="examples.html"
+       title="previous chapter">← Examples</a>
+  </li>
+  <li class="next">
+    <a href="chebyshev.html"
+       title="next chapter">Chebyshev →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, izumi.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>
