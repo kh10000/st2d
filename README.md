@@ -11,7 +11,7 @@ git clone https://github.com/kh10000/st2d.git
 cd st2d
 pip install .
 ```
-In order for the calculations with MPI parallelization, additional installation of mpi4py by
+In order to perform parallel calculations, additional installation of mpi4py by
 ```
 pip install mpi4py
 ```
