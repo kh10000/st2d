@@ -199,13 +199,9 @@ extern "C" int calculate_sf(double** cell, double** cart, double** scale,
             // coeffcient of each directional vector (order : ij, ik)
             rRij = nei_list_d[j*4 + 3];
 
-            vecij[0] = nei_list_d[j*4]/rRij;
-            vecij[1] = nei_list_d[j*4 + 1]/rRij;
-            vecij[2] = nei_list_d[j*4 + 2]/rRij;
-
-            lcoeff[0] = nei_list_d[j*4]*inv[0][0] + nei_list_d[j*4 + 1]*inv[1][0] + nei_list_d[j*4 + 2]*inv[2][0];
-            lcoeff[1] = nei_list_d[j*4]*inv[0][1] + nei_list_d[j*4 + 1]*inv[1][1] + nei_list_d[j*4 + 2]*inv[2][1];
-            lcoeff[2] = nei_list_d[j*4]*inv[0][2] + nei_list_d[j*4 + 1]*inv[1][2] + nei_list_d[j*4 + 2]*inv[2][2];
+            // vecij[0] = nei_list_d[j*4]/rRij;
+            // vecij[1] = nei_list_d[j*4 + 1]/rRij;
+            // vecij[2] = nei_list_d[j*4 + 2]/rRij;
 
             for (int s=0; s < nsyms; ++s) {
                 if (rRij > params_d[s][0]) continue;
@@ -216,9 +212,9 @@ extern "C" int calculate_sf(double** cell, double** cart, double** scale,
 
                     symf[ii][s] += G2(rRij, precal, params_d[s], dradtmp); // FIXME: index
 
-                    tmpd[0] = dradtmp*vecij[0];
-                    tmpd[1] = dradtmp*vecij[1];
-                    tmpd[2] = dradtmp*vecij[2];
+                    // tmpd[0] = dradtmp*vecij[0];
+                    // tmpd[1] = dradtmp*vecij[1];
+                    // tmpd[2] = dradtmp*vecij[2];
 
                     // dsymf[ii][s*natoms*3 + nei_list_i[j*2 + 1]*3]     += tmpd[0];            
                     // dsymf[ii][s*natoms*3 + nei_list_i[j*2 + 1]*3 + 1] += tmpd[1];            
@@ -236,9 +232,9 @@ extern "C" int calculate_sf(double** cell, double** cart, double** scale,
                 // calculate angular symmetry function
                 rRik = nei_list_d[k*4 + 3];
                 if (rRik > max_rc_ang) continue;
-                vecik[0] = nei_list_d[k*4]     / rRik;
-                vecik[1] = nei_list_d[k*4 + 1] / rRik;
-                vecik[2] = nei_list_d[k*4 + 2] / rRik;
+                // vecik[0] = nei_list_d[k*4]     / rRik;
+                // vecik[1] = nei_list_d[k*4 + 1] / rRik;
+                // vecik[2] = nei_list_d[k*4 + 2] / rRik;
 
                 deljk[0] = nei_list_d[k*4]     - nei_list_d[j*4];
                 deljk[1] = nei_list_d[k*4 + 1] - nei_list_d[j*4 + 1];
@@ -247,17 +243,9 @@ extern "C" int calculate_sf(double** cell, double** cart, double** scale,
 
                 if (rRjk < 0.0001) continue;
 
-                vecjk[0] = deljk[0] / rRjk;
-                vecjk[1] = deljk[1] / rRjk;
-                vecjk[2] = deljk[2] / rRjk;
-
-                lcoeff[3] = nei_list_d[k*4]*inv[0][0] + nei_list_d[k*4 + 1]*inv[1][0] + nei_list_d[k*4 + 2]*inv[2][0];
-                lcoeff[4] = nei_list_d[k*4]*inv[0][1] + nei_list_d[k*4 + 1]*inv[1][1] + nei_list_d[k*4 + 2]*inv[2][1];
-                lcoeff[5] = nei_list_d[k*4]*inv[0][2] + nei_list_d[k*4 + 1]*inv[1][2] + nei_list_d[k*4 + 2]*inv[2][2];
-
-                lcoeff[6] = deljk[0]*inv[0][0] + deljk[1]*inv[1][0] + deljk[2]*inv[2][0];
-                lcoeff[7] = deljk[0]*inv[0][1] + deljk[1]*inv[1][1] + deljk[2]*inv[2][1];
-                lcoeff[8] = deljk[0]*inv[0][2] + deljk[1]*inv[1][2] + deljk[2]*inv[2][2];
+                // vecjk[0] = deljk[0] / rRjk;
+                // vecjk[1] = deljk[1] / rRjk;
+                // vecjk[2] = deljk[2] / rRjk;
 
                 precal[7]  = (rRij*rRij + rRik*rRik - rRjk*rRjk)/2/rRij/rRik;
                 precal[8]  = 0.5*(1/rRik + 1/rRij/rRij*(rRjk*rRjk/rRik - rRik));
@@ -285,15 +273,15 @@ extern "C" int calculate_sf(double** cell, double** cart, double** scale,
 
                         symf[ii][s] += G4(rRij, rRik, rRjk, powtwo[s], precal, params_d[s], dangtmp, powint[s]);
 
-                        tmpd[0] = dangtmp[0]*vecij[0];
-                        tmpd[1] = dangtmp[0]*vecij[1];
-                        tmpd[2] = dangtmp[0]*vecij[2];
-                        tmpd[3] = dangtmp[1]*vecik[0];
-                        tmpd[4] = dangtmp[1]*vecik[1];
-                        tmpd[5] = dangtmp[1]*vecik[2];
-                        tmpd[6] = dangtmp[2]*vecjk[0];
-                        tmpd[7] = dangtmp[2]*vecjk[1];
-                        tmpd[8] = dangtmp[2]*vecjk[2];
+                        // tmpd[0] = dangtmp[0]*vecij[0];
+                        // tmpd[1] = dangtmp[0]*vecij[1];
+                        // tmpd[2] = dangtmp[0]*vecij[2];
+                        // tmpd[3] = dangtmp[1]*vecik[0];
+                        // tmpd[4] = dangtmp[1]*vecik[1];
+                        // tmpd[5] = dangtmp[1]*vecik[2];
+                        // tmpd[6] = dangtmp[2]*vecjk[0];
+                        // tmpd[7] = dangtmp[2]*vecjk[1];
+                        // tmpd[8] = dangtmp[2]*vecjk[2];
 
                         // dsymf[ii][s*natoms*3 + nei_list_i[j*2 + 1]*3]     += tmpd[0] - tmpd[6];
                         // dsymf[ii][s*natoms*3 + nei_list_i[j*2 + 1]*3 + 1] += tmpd[1] - tmpd[7];
@@ -316,15 +304,15 @@ extern "C" int calculate_sf(double** cell, double** cart, double** scale,
 
                         symf[ii][s] += G5(rRij, rRik, powtwo[s], precal, params_d[s], dangtmp, powint[s]);
 
-                        tmpd[0] = dangtmp[0]*vecij[0];
-                        tmpd[1] = dangtmp[0]*vecij[1];
-                        tmpd[2] = dangtmp[0]*vecij[2];
-                        tmpd[3] = dangtmp[1]*vecik[0];
-                        tmpd[4] = dangtmp[1]*vecik[1];
-                        tmpd[5] = dangtmp[1]*vecik[2];
-                        tmpd[6] = dangtmp[2]*vecjk[0];
-                        tmpd[7] = dangtmp[2]*vecjk[1];
-                        tmpd[8] = dangtmp[2]*vecjk[2];
+                        // tmpd[0] = dangtmp[0]*vecij[0];
+                        // tmpd[1] = dangtmp[0]*vecij[1];
+                        // tmpd[2] = dangtmp[0]*vecij[2];
+                        // tmpd[3] = dangtmp[1]*vecik[0];
+                        // tmpd[4] = dangtmp[1]*vecik[1];
+                        // tmpd[5] = dangtmp[1]*vecik[2];
+                        // tmpd[6] = dangtmp[2]*vecjk[0];
+                        // tmpd[7] = dangtmp[2]*vecjk[1];
+                        // tmpd[8] = dangtmp[2]*vecjk[2];
 
                         // dsymf[ii][s*natoms*3 + nei_list_i[j*2 + 1]*3]     += tmpd[0] - tmpd[6];
                         // dsymf[ii][s*natoms*3 + nei_list_i[j*2 + 1]*3 + 1] += tmpd[1] - tmpd[7];
