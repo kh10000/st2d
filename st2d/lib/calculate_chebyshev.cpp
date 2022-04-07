@@ -16,14 +16,14 @@ extern "C" int calculate_chebyshev(double** cell, double** cart, double** scale,
     // params_d: cutoff distances
     //           [Rc for rdf, Rc for adf, Rc for weighted-rdf, Rc for weighted-adf]
     // natoms: # of atoms
-    // nsyms: # descriptor dimension
+    // nsyms: descriptor dimension
     // symf: descriptor vector ([# of atoms, # of symfuncs])
 
     int total_bins, max_atoms_bin, bin_num, neigh_check_bins, nneigh;
     int bin_range[3], nbins[3], cell_shift[3], max_bin[3], min_bin[3], pbc_bin[3];
     //int bin_i[natoms][4];
     double vol, tmp, cutoff, dradtmp, rRij, rRik, rRjk;
-    double plane_d[3], total_shift[3], precal[12], tmpd[9], dangtmp[3], lcoeff[9];
+    double plane_d[3], total_shift[3], precal[5], tmpd[9], dangtmp[3], lcoeff[9];
     double vecij[3], vecik[3], vecjk[3], deljk[3];
     double cross[3][3], reci[3][3], inv[3][3];//, powtwo[nsyms];
     double max_rc_ang = 0.0;
@@ -47,29 +47,10 @@ extern "C" int calculate_chebyshev(double** cell, double** cart, double** scale,
     // double *u_ang_w = new double[params_i[3]];
     // u_rad[0] = 1.0; u_ang[0] = 1.0; u_rad_w[0] = 1.0; u_ang_w[0] = 1.0;
 
-    // for (int i=0; i<5+1; i++) {
-    //     nsf[i] = 0;
-    // }
-
-    // // Check for not implemented symfunc type.
-    // for (int s=0; s < nsyms; ++s) {
-    //     bool implemented = false;
-    //     for (int i=0; i < sizeof(IMPLEMENTED_TYPE) / sizeof(IMPLEMENTED_TYPE[0]); i++) {
-    //         if (params_i[s][0] == IMPLEMENTED_TYPE[i]) {
-    //             implemented = true;
-    //             break;
-    //         }
-    //     }
-    //     if (!implemented) return 1;
-    // }
-
     int **bin_i = new int*[natoms];
     for (int i=0; i<natoms; i++) {
         bin_i[i] = new int[4];
     }
-
-    double *powtwo = new double[nsyms]();  
-    bool *powint = new bool[nsyms];
 
     for (int s=1; s < 4; s+=2) {
         max_rc_ang = max_rc_ang > params_d[s] ? max_rc_ang : params_d[s];
@@ -198,14 +179,9 @@ extern "C" int calculate_chebyshev(double** cell, double** cart, double** scale,
         }
 
         for (int j=0; j < nneigh; ++j) {
-            // calculate radial symmetry function
-            // coeffcient of each directional vector (order : ij, ik)
-            // calculate rdf?
+            // calculate expansion cofficients of RDF and weighted-RDF
+            // RDF
             rRij = nei_list_d[j*5 + 3];
-
-            // vecij[0] = nei_list_d[j*5]/rRij;
-            // vecij[1] = nei_list_d[j*5 + 1]/rRij;
-            // vecij[2] = nei_list_d[j*5 + 2]/rRij;
 
             xij = 2 * rRij/params_d[0] - 1;
             precal[0] = cutf(rRij/params_d[0]);
@@ -225,7 +201,7 @@ extern "C" int calculate_chebyshev(double** cell, double** cart, double** scale,
                 symf[ii][s] += p_rad[s]*precal[0];
             }
 
-            //weighted rdf
+            // weighted rdf
             xij = 2*rRij/params_d[2] - 1;
             precal[0] = cutf(rRij/params_d[2]);
             // precal[1] = dcutf(rRij, params_d[2]);
@@ -246,12 +222,9 @@ extern "C" int calculate_chebyshev(double** cell, double** cart, double** scale,
 
             if (rRij > max_rc_ang) continue;
             for (int k=j+1; k < nneigh; ++k) {
-                // calculate 3-body term
+                // ADF
                 rRik = nei_list_d[k*5 + 3];
                 if (rRik > max_rc_ang) continue;
-                // vecik[0] = nei_list_d[k*5 + 0] / rRik;
-                // vecik[1] = nei_list_d[k*5 + 1] / rRik;
-                // vecik[2] = nei_list_d[k*5 + 2] / rRik;
 
                 deljk[0] = nei_list_d[k*5]     - nei_list_d[j*5];
                 deljk[1] = nei_list_d[k*5 + 1] - nei_list_d[j*5 + 1];
@@ -259,10 +232,6 @@ extern "C" int calculate_chebyshev(double** cell, double** cart, double** scale,
                 rRjk = sqrt(deljk[0]*deljk[0] + deljk[1]*deljk[1] + deljk[2]*deljk[2]);
 
                 if (rRjk < 0.0001) continue;
-
-                // vecjk[0] = deljk[0] / rRjk;
-                // vecjk[1] = deljk[1] / rRjk;
-                // vecjk[2] = deljk[2] / rRjk;
 
                 precal[0] = cutf(rRij/params_d[1]);
                 precal[1] = cutf(rRik/params_d[1]);
@@ -285,7 +254,7 @@ extern "C" int calculate_chebyshev(double** cell, double** cart, double** scale,
                     symf[ii][s+rad_dim] += p_ang[s]*precal[0]*precal[1];                    
                 }
 
-                // weighted term
+                // weighted ADF
                 if (ang_dim_w > 0){
                     p_ang_w[1] = xijk;
                     // u_ang_w[1] = 2*xijk;
@@ -311,8 +280,6 @@ extern "C" int calculate_chebyshev(double** cell, double** cart, double** scale,
         delete[] bin_i[i];
     }
     delete[] bin_i;
-    delete[] powtwo;
-    delete[] powint;
 
     delete[] p_rad;
     delete[] p_ang;
